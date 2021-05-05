@@ -1,0 +1,7 @@
+{
+    "chromeWebSecurity": false,
+    "defaultCommandTimeout": 10000,
+    "viewportHeight": 768,
+    "viewportWidth": 1366, 
+    "baseUrl": "http://staging.batchskiptracing.com"
+  }
