@@ -163,4 +163,21 @@ describe("Failed Register with Empty Fields", () => {
     regpage.clickRegisterButton();
     regpage.verifyMandatoryFieldError("confirmPassword");
   });
+
+  it("SKT-T6: Verify 'back to login' should be clickable.", () => {
+    const regpage = new Register();
+    cy.reload();
+    regpage.clickBackToLoginLink();
+    regpage.verifyLoginButton();
+  });
+
+  it("SKT-T8: Verify Successful Register", () => {
+    const regpage = new Register();
+    regpage.clickSignUpNowButton();
+    regpage.enterFirstName(fixtureData.firstName);
+    regpage.enterLastName(fixtureData.lastName);
+    regpage.enterEmail(
+      String(fixtureData.email).replace("-user", "-user" + String(randNum))
+    );
+  });
 });
