@@ -31,4 +31,12 @@ describe("Validate login page with all scenarios", () => {
     loginPage.verifyEmailPasswordField("password");
     loginPage.verifyTermsOfServicesError();
   });
+
+  it("SKT-T11: Verify validation on Email", () => {
+    loginPage.enterEmail("invalid");
+    loginPage.enterPassword(fixtureData.password);
+    loginPage.clickOnCheckBox();
+    loginPage.clickLoginButton();
+    loginPage.verifyInvalidEmail("userId");
+  });
 });

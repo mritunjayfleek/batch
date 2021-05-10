@@ -179,5 +179,28 @@ describe("Failed Register with Empty Fields", () => {
     regpage.enterEmail(
       String(fixtureData.email).replace("-user", "-user" + String(randNum))
     );
+    regpage.enterCompanyName(fixtureData.companyName);
+    regpage.enterMobileNumber(fixtureData.MobileNumber);
+    regpage.enterPassword(fixtureData.password);
+    regpage.enterConfirmPassword(fixtureData.confirmPassword);
+    regpage.clickRegisterButton();
+    regpage.verifySuccessfullRegister();
+  });
+
+  it("SKT-T7: Validate Duplicate Email Address", () => {
+    const regpage = new Register();
+    regpage.clickLogout();
+    regpage.clickSignUpNowButton();
+    regpage.enterFirstName(fixtureData.firstName);
+    regpage.enterLastName(fixtureData.lastName);
+    regpage.enterEmail(
+      String(fixtureData.email).replace("-user", "-user" + String(randNum))
+    );
+    regpage.enterCompanyName(fixtureData.companyName);
+    regpage.enterMobileNumber(fixtureData.MobileNumber);
+    regpage.enterPassword(fixtureData.password);
+    regpage.enterConfirmPassword(fixtureData.confirmPassword);
+    regpage.clickRegisterButton();
+    regpage.verifyDuplicateEmailError();
   });
 });
