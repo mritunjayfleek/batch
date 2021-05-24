@@ -4,10 +4,10 @@ Prerequisite:
 Node
 git
 
-In order to get the code and install dependencies:
-git clone https://mritunjay-bst@bitbucket.org/mritunjay-bst/bst-qa.git
-cd bst-qa (project directory)
-npm install
+	In order to get the code and install dependencies:
+	git clone https://mritunjay-bst@bitbucket.org/mritunjay-bst/bst-qa.git
+	cd bst-qa (project directory)
+	npm install
 
 By triggering “npm install” command, it will install all dependencies from package.json in the project.
 
