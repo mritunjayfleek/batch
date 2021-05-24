@@ -17,7 +17,7 @@ Run tests:
 	To run the tests, there are following options:
 	
 	npx cypress open: 
-		   this will launch the test runner. Tet runner contains all test files  
+		   this will launch the test runner. Test runner contains all test files  
            from where one can select and run any particular test file or can run entire 
            tests.this will start executing the tests related to the spec file in non-headless Mode.
 		   
