@@ -1,8 +1,9 @@
 # README #
 
 Prerequisite:
-Node
-git
+
+	Node
+	git
 
 	In order to get the code and install dependencies:
 	git clone https://mritunjay-bst@bitbucket.org/mritunjay-bst/bst-qa.git
