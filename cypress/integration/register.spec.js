@@ -5,11 +5,7 @@ let randNum = Math.floor(Math.random() * 1000);
 describe("Failed Register with Empty Fields", () => {
   before(() => {
     // To add random number in constants.json
-    cy.readFile("cypress/fixtures/constants.json", (err, data) => {
-      if (err) {
-        return console.error(err);
-      }
-    }).then((data) => {
+    cy.readFile("cypress/fixtures/constants.json").then((data) => {
       data.randNum = randNum;
       cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
     });
@@ -50,8 +46,8 @@ describe("Failed Register with Empty Fields", () => {
   it("SKT-T3: Verify validation on First name and Last name", () => {
     const regpage = new Register();
     cy.reload();
-    regpage.enterFirstName("1234");
-    regpage.enterLastName("5678");
+    regpage.enterFirstName("1234@@");
+    regpage.enterLastName("5678@@");
     regpage.enterEmail(fixtureData.email);
     regpage.enterCompanyName(fixtureData.companyName);
     regpage.enterMobileNumber(fixtureData.MobileNumber);
@@ -171,7 +167,7 @@ describe("Failed Register with Empty Fields", () => {
     regpage.verifyLoginButton();
   });
 
-  it("SKT-T8: Verify Successful Register", () => {
+  it.skip("SKT-T8: Verify Successful Register", () => {
     const regpage = new Register();
     regpage.clickSignUpNowButton();
     regpage.enterFirstName(fixtureData.firstName);

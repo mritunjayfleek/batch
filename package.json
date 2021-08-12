@@ -16,7 +16,7 @@
   "homepage": "https://bitbucket.org/mritunjay-bst/bst-qa#readme",
   "dependencies": {
     "chai": "^4.3.4",
-    "cypress": "^7.2.0",
+    "cypress": "^7.7.0",
     "cypress-xpath": "^1.6.2"
   }
 }

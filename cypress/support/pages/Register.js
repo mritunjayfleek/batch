@@ -84,7 +84,9 @@ export default class Register {
 
   verifyValidationOnFirstLastField(inputField) {
     cy.get(firstLastNameValidation(inputField)).then((errText) => {
-      expect(errText.text()).to.contain("can contain only alphabets");
+      expect(errText.text()).to.contain(
+        "can contain alphabets, numbers and special characters"
+      );
     });
   }
 
