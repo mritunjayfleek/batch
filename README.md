@@ -1,29 +1,28 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Prerequisite:
 
-### What is this repository for? ###
+	Node
+	git
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+	In order to get the code and install dependencies:
+	git clone https://mritunjay-bst@bitbucket.org/mritunjay-bst/bst-qa.git
+	cd bst-qa (project directory)
+	npm install
 
-### How do I get set up? ###
+By triggering “npm install” command, it will install all dependencies from package.json in the project.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Run tests:
 
-### Contribution guidelines ###
+	To run the tests, there are following options:
+	
+	npx cypress open: 
+		   this will launch the test runner. Test runner contains all test files  
+           from where one can select and run any particular test file or can run entire 
+           tests.this will start executing the tests related to the spec file in non-headless Mode.
+		   
+	npx cypress run:
+	       By triggering this command will start executing all tests from spec file in headless mode.
 
-* Writing tests
-* Code review
-* Other guidelines
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+	
