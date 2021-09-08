@@ -19,7 +19,7 @@ const loginButton = 'button[type="submit"]';
 const duplicateEmailError =
   '//div[@role="alertdialog" and contains(text(),"is already in use")]';
 const profilePic = ".profile-pic";
-const logout = ".log-out";
+const logout = '.log-out img[src*="log-out"]';
 
 export default class Register {
   clickSignUpNowButton() {

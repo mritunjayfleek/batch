@@ -2,10 +2,14 @@ import Register from "../support/pages/Register";
 let fixtureData;
 let randNum = Math.floor(Math.random() * 1000);
 
-describe("Failed Register with Empty Fields", () => {
+describe("Validate register page with all scenarios.", () => {
   before(() => {
     // To add random number in constants.json
-    cy.readFile("cypress/fixtures/constants.json").then((data) => {
+    cy.readFile("cypress/fixtures/constants.json", (err, data) => {
+      if (err) {
+        return console.error(err);
+      }
+    }).then((data) => {
       data.randNum = randNum;
       cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
     });
@@ -167,7 +171,7 @@ describe("Failed Register with Empty Fields", () => {
     regpage.verifyLoginButton();
   });
 
-  it.skip("SKT-T8: Verify Successful Register", () => {
+  it("SKT-T8: Verify Successful Register", () => {
     const regpage = new Register();
     regpage.clickSignUpNowButton();
     regpage.enterFirstName(fixtureData.firstName);

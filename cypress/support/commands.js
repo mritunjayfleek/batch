@@ -25,3 +25,19 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 /// <reference types="cypress" />
+import Login from "../support/pages/Login";
+import Register from "./pages/Register";
+const login = new Login();
+const register = new Register();
+
+Cypress.Commands.add("Login", (username, password) => {
+  login.enterEmail(username);
+  login.enterPassword(password);
+  login.clickOnCheckBox();
+  login.clickLoginButton();
+  login.verifySuccessfullLogin();
+});
+
+Cypress.Commands.add("Logout", () => {
+  register.clickLogout();
+});

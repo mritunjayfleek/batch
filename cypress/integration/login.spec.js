@@ -14,6 +14,10 @@ describe("Validate login page with all scenarios", () => {
       });
   });
 
+  after(() => {
+    cy.Logout();
+  });
+
   it("SKT-T9: Verify elements on Login page", () => {
     loginPage.verifyEmailInputField();
     loginPage.verifyPasswordInputField();
@@ -48,7 +52,7 @@ describe("Validate login page with all scenarios", () => {
     loginPage.clickOkButtonOnDialog();
   });
 
-  it("SKT-T13: Verify login without checking the checkbox of Terms and privacy policy", () => {
+  it("SKT-T13: Verify Terms and privacy policy link checkbox.", () => {
     loginPage.enterEmail(fixtureData.email);
     loginPage.enterPassword(fixtureData.password);
     loginPage.clickOnCheckBox();
@@ -88,5 +92,49 @@ describe("Validate login page with all scenarios", () => {
   it("SKT-T19: Verify mandatory fields on Reset page.", () => {
     loginPage.clickResetButton();
     regPage.verifyMandatoryFieldError("email");
+  });
+
+  it("SKT-T20: Verify reset password with wrong email.", () => {
+    loginPage.enterResetEmail("invalid");
+    loginPage.clickResetButton();
+    loginPage.verifyInvalidEmail("email");
+  });
+
+  it("SKT-T21: Verify reset password with invalid email Address", () => {
+    loginPage.enterResetEmail("invalid@email.com");
+    loginPage.clickResetButton();
+    loginPage.verifyDilaogOpened();
+    loginPage.verifyDialogTitle();
+    loginPage.clickOkButtonOnDialog();
+  });
+
+  it("SKT-T22: Verify reset password with valid email Address", () => {
+    loginPage.enterResetEmail(fixtureData.resetEmail);
+    loginPage.clickResetButton();
+    loginPage.verifyDilaogOpened();
+    loginPage.verifyDialogSuccessTitle();
+    loginPage.clickOkButtonOnDialog();
+  });
+
+  it("SKT-T23: Verify 'back to signup' link from right card on Reset Password Page", () => {
+    loginPage.clickBackToSignUpLink();
+    regPage.verifyRegisterFields("firstName");
+    regPage.verifyRegisterFields("lastName");
+    regPage.verifyBackToLoginLink();
+  });
+
+  it("SKT-T24: Verify 'back to signin' button should be clickable.", () => {
+    loginPage.clickForgetPasswordLink();
+    loginPage.verifyBackTOSignInBtn();
+    loginPage.clickBackToSIgnInBtn();
+    loginPage.verifyResetPasswordLink();
+  });
+
+  it("SKT-T25: Verify Successful Login", () => {
+    loginPage.enterEmail(fixtureData.email);
+    loginPage.enterPassword(fixtureData.password);
+    loginPage.clickOnCheckBox();
+    loginPage.clickLoginButton();
+    loginPage.verifySuccessfullLogin();
   });
 });
