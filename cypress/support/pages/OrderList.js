@@ -44,20 +44,15 @@ const termcheckbox = "#customCheckWalletTerms + span";
 const amountsuccessmsg = "[id=toast-container]";
 const notifihoverbox = "div.notifi-drop.show";
 const profileicon = "span.profile-pic";
-const totalordernum =
-  "//div[@class='equity-box']//div//div[1]//div[1]//div[1]//div[1]";
-const compltordernum =
-  "//div[@class='equity-box']//div//div[1]//div[1]//div[2]";
-const pendingnum = "//div[@class='equity-box']//div//div[1]//div[1]//div[3]";
-const hitpercent = "//div[@class='equity-box']//div//div[1]//div[1]//div[4]";
-const errornum = "//div[@class='equity-box']//div//div[1]//div[1]//div[5]";
 const filterordernum = "div.days-box";
 const singleskip = 'button img[src*="single-skip"]';
-const inputSingleSkipAdd = 'input[placeholder*="Property Address"]';
-const skiptracebtn = "[btnclass=btn-img] button";
+const bulkSKip = '.btnbox button img[src*="bulk-skip"]';
+const inputSingleSkipAdd = '.search-box input[placeholder*="Property Address"]';
+const skiptracebtn = ".container [btnclass=btn-img] button";
 const listtext = "[name =listName]";
 const paynowbtn =
-  "//form[contains(@class,'needs-validation')]/following-sibling::div//button[contains(@class,'bst-blue-btn')]";
+  '//div[@id="payment-form"]//button[contains(text(),"PAY NOW")]';
+const singlePaymentForm = "div#payment-form";
 const singleskip_successmsg = "[role=alertdialog]";
 const sevendays =
   "div.days-box app-bst-button:nth-of-type(1) button:nth-of-type(1)";
@@ -77,6 +72,33 @@ const hitsPercent =
   '//div[contains(@class,"smsent-box")]/p[text()="Hits%"]/preceding-sibling::h4';
 const errorsNum =
   '//div[contains(@class,"smsent-box")]/p[text()="Errors"]/preceding-sibling::h4';
+const successAlertSkiptrace =
+  '//div[@id="toast-container"]//div[contains(text(),"processed successfully")]';
+const daysFilter = (days) =>
+  `//div[contains(@class,"days-box")]//button[contains(text(),"${days}")]`;
+const matchPerTotal = "td.matchPercent span span";
+const nextBtnNotDisabled = "#bst-table_next:not(.disabled)";
+const paginateNumb =
+  ".paginate_button:not(.first):not(.last):not(.previous):not(.next)";
+
+const selectStatus = 'select[formcontrolname="status"]';
+const selectedDaysFilter = (selDays) =>
+  `//div[contains(@class,"days-box")]//button[not(contains(@class,"white-btn"))][contains(text(),"${selDays}")]`;
+const dateAdded = "td.dateModified span span";
+const singleTraceModal = "app-single-skip-trace-modal .modal-body";
+const searchIcononModal = ".property-search button";
+const skipTraceTitle = "h5.modal-title";
+const addressSuggestion = 'div.pac-container:not([style*="none"])';
+const searchIcon = ".property-search";
+const addressSubTitle = (address) =>
+  `//div[@id="payment-form"]//div[contains(text(),"${address}")]`;
+const listNameInput = 'div#payment-form input[name="listName"]';
+const perMatch = "span.per-match-count span";
+const totalCost = ".total-cost-text+.total-cost";
+const couponField = '.payment-coupon-code input[formcontrolname="couponCode"]';
+const cancelbtn =
+  '//div[@id="payment-form"]//button[contains(text(),"CANCEL")]';
+const walletCheckbox = "#payment-form #chkUseCurrentBalance";
 
 export default class OrderList {
   visit() {
@@ -244,31 +266,6 @@ export default class OrderList {
     cy.get(paybtn).should("be.enabled").click();
   }
 
-  // verifyAddWalletAmount(amount) {
-  //   cy.get("div.modal-content").then((amounToAdd) => {
-  //     if (amounToAdd.find(topupInputField).length > 0) {
-  //       cy.get(topupInputField).clear().type(amount);
-  //       cy.get(termcheckbox).click();
-  //       cy.get(walletnotrefundtext).click();
-  //       cy.get(paybtn).should("be.enabled").click();
-  //     } else {
-  //       cy.get(cardname).type("Test");
-  //       cy.get('iframe[title="Secure card payment input frame"]')
-  //         .its("0.contentDocument.body")
-  //         .should("not.be.empty")
-  //         .then((body) => {
-  //           cy.wrap(body).find(cardnumber).type("4000056655665556");
-  //           cy.wrap(body).find(expiredate).type("1124", { force: true });
-  //           cy.wrap(body).find(cvcnum).type("123", { force: true });
-  //           cy.wrap(body).find(postal).type("12345", { force: true });
-  //         });
-  //       cy.get(agree_fordebit).click({ force: true });
-  //       cy.xpath(savepayment).should("be.enabled").click();
-  //       cy.wait(2000);
-  //     }
-  //   });
-  // }
-
   verifyAddWalletAmount(amount) {
     cy.get("div.modal-content").then((amounToAdd) => {
       if (amounToAdd.find(topupInputField).length > 0) {
@@ -396,7 +393,7 @@ export default class OrderList {
     cy.xpath(cmpltdOrdNum).then((numbers) => {
       const ordNum = numbers.text();
       cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.TotalOrders = ordNum;
+        data.CompletedOrders = ordNum;
         cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
       });
     });
@@ -406,7 +403,7 @@ export default class OrderList {
     cy.xpath(pendOrdNum).then((numbers) => {
       const ordNum = numbers.text();
       cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.TotalOrders = ordNum;
+        data.PendingOrders = ordNum;
         cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
       });
     });
@@ -416,7 +413,7 @@ export default class OrderList {
     cy.xpath(hitsPercent).then((numbers) => {
       const ordNum = numbers.text();
       cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.TotalOrders = ordNum;
+        data.HitsPercent = ordNum;
         cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
       });
     });
@@ -426,53 +423,12 @@ export default class OrderList {
     cy.xpath(errorsNum).then((numbers) => {
       const ordNum = numbers.text();
       cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.TotalOrders = ordNum;
+        data.ErrorNumber = ordNum;
         cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
       });
     });
   }
 
-  verify_orderlistelements() {
-    cy.get(skipTraceMenu).click();
-    let text = cy.xpath(totalordernum).then((el) => {
-      const txt = el.text().trim();
-      cy.log(txt);
-      expect(txt).to.include("Total Orders");
-      cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.orderlistcount = txt.split("T")[0];
-        cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
-      });
-    });
-  }
-  verify_ordercomplt() {
-    let text = cy.xpath(compltordernum).then((el) => {
-      const txt = el.text().trim();
-      cy.log(txt);
-      expect(txt).to.include("Completed Orders");
-      cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.compltlistcount = txt.split("C")[0];
-        cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
-      });
-    });
-  }
-  verify_Pending() {
-    let text = cy.xpath(pendingnum).then((el) => {
-      const txt = el.text().trim();
-      cy.log(txt);
-      expect(txt).to.include("Pending Orders");
-    });
-  }
-  Verify_Hit_Order() {
-    let text = cy.xpath(hitpercent).then((el) => {
-      const txt = el.text().trim();
-      cy.log(txt);
-      expect(txt).to.include("Hits%");
-      cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        data.HitPercent = txt.split("H")[0];
-        cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
-      });
-    });
-  }
   Verify_Error_filter() {
     let text = cy.xpath(errornum).then((el) => {
       const txt = el.text().trim();
@@ -517,59 +473,255 @@ export default class OrderList {
   //     });
   // }
 
-  clickSingleSkipTraceNow() {
-    cy.get(singleskip).should("be.enabled").click();
+  clickSingleSkipTrace() {
+    cy.get(singleskip, { timeout: 6000 }).click();
   }
 
   enterAdressToSkipTrace(address) {
-    cy.get(inputSingleSkipAdd).type(address);
+    cy.get(inputSingleSkipAdd)
+      .type(address)
+      .wait(500)
+      .type("{downarrow}")
+      .type("{enter}");
   }
 
-  verify_CompltOrdercount() {
-    cy.reload({ timeout: 15000 });
-    cy.wait(5000);
-    let text = cy.xpath(compltordernum).then((el) => {
-      const txt = el.text();
-      cy.log(txt);
+  clickSkipTraceNowBtn() {
+    cy.wait(2000);
+    cy.get(skiptracebtn).click();
+  }
+
+  verifyskipPayPage() {
+    cy.get(singlePaymentForm, { timeout: 4000 }).should("be.visible");
+  }
+
+  enterListName(traceName) {
+    cy.get(listtext).type(traceName);
+  }
+
+  clickSkipPayNowBtn() {
+    cy.wait(2000);
+    cy.xpath(paynowbtn).click();
+  }
+
+  verifySkipTraceSuccessMsg() {
+    cy.get(toastMessage, { timeout: 15000 }).should("be.visible");
+    cy.xpath(successAlertSkiptrace, { timeout: 10000 }).should("be.visible");
+  }
+
+  verifyOrderCount() {
+    cy.xpath(totalOrdNum).then((numbers) => {
+      const orderNum = numbers.text();
+      cy.log(orderNum);
       cy.readFile("cypress/fixtures/constants.json").then((data) => {
-        expect(txt).to.include(parseInt(data.compltlistcount) + 1);
+        expect(orderNum).to.include(parseInt(data.TotalOrders) + 1);
       });
     });
   }
 
-  page_reload() {
-    cy.reload();
-    cy.wait(3000);
+  verifyCompltdOrderCount() {
+    cy.xpath(cmpltdOrdNum).then((numbers) => {
+      const cmpltdNum = numbers.text();
+      cy.log(cmpltdNum);
+      cy.readFile("cypress/fixtures/constants.json").then((data) => {
+        expect(cmpltdNum).to.include(parseInt(data.CompletedOrders) + 1);
+      });
+    });
   }
 
-  verify_Hitpercentcount() {
-    cy.get("table.bst-table tbody").then(($table) => {
-      const text = $table.find(".matchPercent").first().text();
-      cy.log(text);
-      if (text.includes("100%")) {
-        cy.log("Yes");
-        let text = cy.xpath(hitpercent).then((el) => {
-          const txt = el.text();
-          cy.log(txt);
-          cy.readFile("cypress/fixtures/constants.json").then((data) => {
-            expect(txt).is.include(parseInt(parseFloat(data.HitPercent) + 0.7));
-          });
-        });
-      } else {
-        cy.log("No");
-        let text = cy.xpath(hitpercent).then((el) => {
-          const txt = el.text();
-          cy.log(txt);
-          cy.readFile("cypress/fixtures/constants.json").then((data) => {
-            expect(txt).is.include(
-              parseInt(parseFloat(data.HitPercent) - 0.75)
-            );
-          });
-        });
+  verifyDaysFilter(days) {
+    for (let i = 0; i < days.length; i++) {
+      cy.xpath(daysFilter(days[i])).should("be.visible");
+    }
+  }
+
+  getCountAndHitsAdd() {
+    let total = 0;
+    cy.get(matchPerTotal).then((records) => {
+      const val = records.length;
+      for (let i = 0; i < records.length; i++) {
+        const hitNum = records.text();
+        total = total + parseInt(hitNum);
       }
     });
   }
-  verify_Dayfilter() {
-    cy.get(filterordernum).should("be.visible");
+
+  getCountAndHitsAddTest() {
+    cy.get(paginateNumb) // last() will return last value from found result.
+      .last()
+      .then((num) => {
+        const maxPaginate = parseInt(num.text());
+        let sum = 0;
+        let len = 0;
+        for (let i = 0; i < maxPaginate; i++) {
+          cy.get(matchPerTotal).then((records) => {
+            len = len + records.length;
+            for (let i = 0; i < records.length; i++) {
+              const hitNum = records[i].textContent.trim().split("%");
+              sum = sum + parseInt(hitNum[0]);
+            }
+            cy.readFile("cypress/fixtures/constants.json").then((data) => {
+              data.TotalHitsSum = sum;
+              data.TotalHitsCount = len;
+              cy.writeFile(
+                "cypress/fixtures/constants.json",
+                JSON.stringify(data)
+              );
+            });
+            cy.log("******" + sum + "     " + len + "********");
+          });
+          cy.get("body").then((body) => {
+            if (body.find(nextBtnNotDisabled).length) {
+              cy.get(nextBtnNotDisabled).click({ force: true });
+            }
+          });
+        }
+      });
+  }
+
+  verifyHitsPercent() {
+    cy.readFile("cypress/fixtures/constants.json").then((data) => {
+      const hitRslt = data.TotalHitsSum / data.TotalHitsCount;
+      cy.xpath(hitsPercent).should("contain.text", hitRslt);
+    });
+  }
+
+  selectCompletedStatus() {
+    cy.get(selectStatus).select("1: complete");
+  }
+
+  clickDaysFilter(days) {
+    cy.xpath(daysFilter(days)).click();
+  }
+
+  verifyDaysSelected(days) {
+    cy.xpath(selectedDaysFilter(days)).should("be.visible");
+  }
+
+  getFilterDate() {
+    cy.get(paginateNumb).last().click(); // last() will return last value from found result.
+    cy.wait(3000);
+    cy.get(dateAdded)
+      .last()
+      .then((date) => {
+        const dateTxt = date.text().trim();
+        cy.readFile("cypress/fixtures/constants.json").then((data) => {
+          data.OrderAddedDate = dateTxt;
+          cy.writeFile("cypress/fixtures/constants.json", JSON.stringify(data));
+        });
+      });
+  }
+
+  comparisonSelectedDaysFilterOrder(filterDays) {
+    let flag = false;
+    let date = new Date();
+    date.setDate(date.getDate() - filterDays);
+    let minusSelectedFilterDays =
+      String(date.getMonth() + 1) +
+      "/" +
+      String(date.getDate()) +
+      "/" +
+      String(date.getFullYear()).substr(-2);
+    cy.log(minusSelectedFilterDays);
+
+    cy.readFile("cypress/fixtures/constants.json").then((data) => {
+      let dateAdded = data.OrderAddedDate;
+      let addedDate = new Date(dateAdded);
+      let addedDateActual =
+        String(addedDate.getMonth() + 1) +
+        "/" +
+        String(addedDate.getDate()) +
+        "/" +
+        String(addedDate.getFullYear()).substr(-2);
+      cy.log(addedDateActual);
+
+      if (new Date(addedDateActual) >= new Date(minusSelectedFilterDays)) {
+        // Added date(website date) should be either greater or equals.. it should not be greater than currentDate-7 date.
+        flag = true;
+        cy.log("IF RUN");
+      } else {
+        cy.log("ELSE RUN");
+      }
+      expect(flag).to.be.true;
+    });
+  }
+
+  verifySingleSkipTrace() {
+    cy.get(singleskip).should("be.visible");
+  }
+
+  verifyBulkSkipTrace() {
+    cy.get(bulkSKip).should("be.visible");
+  }
+
+  verifySingleSkipModalOpen() {
+    cy.get(singleTraceModal).should("be.visible");
+  }
+
+  verifySearchBoxForSingleTrace() {
+    cy.get(inputSingleSkipAdd).should("be.visible");
+  }
+
+  verifySkipTraceTitleonPopup(skipTitle) {
+    cy.get(skipTraceTitle).then((title) => {
+      const getTitle = title.text().trim();
+      expect(getTitle).to.contains(skipTitle);
+    });
+  }
+
+  verifySearchIconOnSingleModal() {
+    cy.get(searchIcononModal).should("be.visible");
+  }
+
+  verifySkipTraceNowBUtton() {
+    cy.get(skiptracebtn).should("be.visible");
+  }
+
+  enterAddresses(address) {
+    cy.get(inputSingleSkipAdd).type(address);
+  }
+
+  verifyAddressesSuggestions() {
+    cy.get(addressSuggestion).should("be.visible");
+  }
+
+  selectFirstSuggestion() {
+    cy.get(inputSingleSkipAdd).wait(1000).type("{downarrow}").type("{enter}");
+  }
+
+  clickSearchIcon() {
+    cy.wait(2000);
+    cy.get(searchIcon).click();
+  }
+
+  verifyAddressOnSkipPayPage(addrss) {
+    cy.xpath(addressSubTitle(addrss)).should("be.visible");
+  }
+
+  verifyListNameInputField() {
+    cy.get(listNameInput).should("be.visible");
+  }
+
+  verifyPerMatchCost(amt) {
+    cy.get(perMatch).then((amount) => {
+      const perMatchAmt = amount.text().trim();
+      expect(perMatchAmt).to.contains(amt);
+    });
+  }
+
+  verifyTotalCostOnSkipPage() {
+    cy.get(totalCost).should("be.visible");
+  }
+
+  verifyCouponCodeField() {
+    cy.get(couponField).should("be.visible");
+  }
+
+  verifyCheckBoxCheckedByDefault() {
+    cy.get(walletCheckbox).should("be.checked");
+  }
+
+  verifyPayNowANDCancelBtn() {
+    cy.xpath(paynowbtn).should("be.visible");
+    cy.xpath(cancelbtn).should("be.visible");
   }
 }

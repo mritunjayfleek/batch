@@ -32,8 +32,8 @@ describe("Validate login page with all scenarios", () => {
   it("SKT-T10: Verify Required Fields", () => {
     loginPage.clickLoginButton();
     loginPage.verifyEmailPasswordField("userId");
-    loginPage.verifyEmailPasswordField("password");
-    loginPage.verifyTermsOfServicesError();
+    // loginPage.verifyEmailPasswordField("password");
+    // loginPage.verifyTermsOfServicesError();
   });
 
   it("SKT-T11: Verify validation on Email", () => {
@@ -121,6 +121,13 @@ describe("Validate login page with all scenarios", () => {
     regPage.verifyRegisterFields("firstName");
     regPage.verifyRegisterFields("lastName");
     regPage.verifyBackToLoginLink();
+  });
+
+  it("SKT-T24: Verify 'back to signin' button should be clickable.", () => {
+    loginPage.clickForgetPasswordLink();
+    loginPage.verifyBackTOSignInBtn();
+    loginPage.clickBackToSIgnInBtn();
+    loginPage.verifyResetPasswordLink();
   });
 
   it("SKT-T24: Verify 'back to signin' button should be clickable.", () => {
